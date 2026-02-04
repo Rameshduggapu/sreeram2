@@ -2,32 +2,33 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>My Valentine 💖</title>
+<title>Forever Valentine 💖</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+/* 🌙 DARK ROMANTIC THEME */
 body {
   margin: 0;
   height: 100vh;
+  background: radial-gradient(circle at top, #2b0036, #0b0014);
   font-family: 'Segoe UI', sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #fff;
   overflow: hidden;
+  color: #fff;
 }
 
 .hidden { display: none; }
 
 .container {
   text-align: center;
-  z-index: 2;
+  z-index: 3;
 }
 
 h1 {
-  font-size: 28px;
+  font-size: 26px;
   margin-bottom: 30px;
-  color: #333;
 }
 
 button {
@@ -40,45 +41,74 @@ button {
 }
 
 .yes {
-  background: #ff4d6d;
+  background: linear-gradient(45deg, #ff4d6d, #ff85a1);
   color: white;
-  transition: transform 0.3s;
+  animation: pulse 1.5s infinite;
 }
 
-.yes:hover {
-  transform: scale(1.15);
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
 }
 
 .no {
-  background: #e0e0e0;
+  background: #555;
+  color: #ccc;
   position: absolute;
 }
 
+/* 🎵 MUSIC BUTTON */
 .music-btn {
   position: fixed;
   top: 15px;
   right: 15px;
-  background: #ff4d6d;
-  color: white;
-  border-radius: 50%;
   width: 50px;
   height: 50px;
+  border-radius: 50%;
+  background: #ff4d6d;
+  color: #fff;
   font-size: 20px;
-}
-
-/* Popup */
-.popup {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.5);
-  display: none;
-  justify-content: center;
-  align-items: center;
   z-index: 5;
 }
 
+/* 🧡 WHATSAPP */
+.whatsapp {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  background: #25D366;
+  color: white;
+  border-radius: 50px;
+  padding: 12px 20px;
+  font-size: 16px;
+  z-index: 5;
+}
+
+/* 💍 RING */
+.ring {
+  font-size: 80px;
+  animation: ringDrop 1.5s ease forwards;
+}
+
+@keyframes ringDrop {
+  0% { transform: translateY(-200px) scale(0); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+/* 💌 POPUP */
+.popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 6;
+}
+
 .popup-content {
-  background: white;
+  background: #1b0028;
   padding: 30px;
   border-radius: 20px;
   text-align: center;
@@ -90,12 +120,12 @@ button {
   margin-top: 15px;
 }
 
-/* Fireworks */
+/* 🎆 FIREWORKS */
 .firework {
   position: absolute;
   width: 6px;
   height: 6px;
-  background: red;
+  background: gold;
   border-radius: 50%;
   animation: explode 1s ease-out forwards;
 }
@@ -107,99 +137,131 @@ button {
   }
 }
 
-/* Password */
-#lockScreen input {
-  padding: 12px;
-  font-size: 16px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
+/* 🌹 ROSES */
+.rose {
+  position: absolute;
+  font-size: 24px;
+  animation: floatUp 6s linear forwards;
+}
+
+@keyframes floatUp {
+  from { transform: translateY(100vh); opacity: 1; }
+  to { transform: translateY(-10vh); opacity: 0; }
+}
+
+/* 🕯️ CANDLE */
+.candle {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  font-size: 40px;
+  animation: flicker 1s infinite;
+}
+
+@keyframes flicker {
+  0%,100% { opacity: 1; }
+  50% { opacity: 0.7; }
 }
 </style>
 </head>
 
 <body>
 
-<!-- 🔐 PASSWORD SCREEN -->
-<div class="container" id="lockScreen">
-  <h1>🔐 Enter the Secret Password</h1>
-  <input type="password" id="passwordInput" placeholder="Password">
+<!-- 🕯️ CANDLE -->
+<div class="candle">🕯️</div>
+
+<!-- 🔐 LOCK -->
+<div class="container" id="lock">
+  <h1>🔐 Enter the Secret</h1>
+  <input type="password" id="pwd" placeholder="Password" style="padding:12px;border-radius:10px;border:none;">
   <br><br>
   <button onclick="unlock()">Unlock 💖</button>
 </div>
 
-<!-- 💖 MAIN CONTENT -->
-<div class="container hidden" id="mainContent">
+<!-- 💖 MAIN -->
+<div class="container hidden" id="main">
   <h1 id="question"></h1>
   <button class="yes" onclick="yesClicked()">YES</button>
   <button class="no" id="noBtn">NO</button>
 </div>
 
 <!-- 🎵 MUSIC -->
-<button class="music-btn hidden" id="musicBtn" onclick="toggleMusic()">🎵</button>
+<button class="music-btn hidden" onclick="toggleMusic()">🎵</button>
 <audio id="music" loop>
   <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
 </audio>
 
+<!-- 🧡 WHATSAPP -->
+<a class="whatsapp hidden" id="wa" target="_blank">Share 💌</a>
+
 <!-- 💌 POPUP -->
 <div class="popup" id="popup">
   <div class="popup-content">
-    <h2>Thank you, My Love 💖</h2>
-    <p>You are my forever 🌸</p>
-    <img src="https://via.placeholder.com/300x400" alt="Love">
+    <div class="ring">💍</div>
+    <h2>Forever Yours 💖</h2>
+    <img src="https://via.placeholder.com/300x400">
   </div>
 </div>
 
 <script>
 /* PASSWORD */
 function unlock() {
-  if (document.getElementById("passwordInput").value === "love123") {
-    document.getElementById("lockScreen").style.display = "none";
-    document.getElementById("mainContent").classList.remove("hidden");
-    document.getElementById("musicBtn").classList.remove("hidden");
-  } else {
-    alert("Wrong password 😜");
-  }
+  if (document.getElementById("pwd").value === "love123") {
+    lock.style.display="none";
+    main.classList.remove("hidden");
+    document.querySelector(".music-btn").classList.remove("hidden");
+    wa.classList.remove("hidden");
+  } else alert("Wrong password 😜");
 }
 
-/* NAME PERSONALIZATION */
-const params = new URLSearchParams(window.location.search);
-const name = params.get("name") || "My Love";
-document.getElementById("question").innerText =
-  `Will you be my Valentine for the rest of my life, ${name}? 💕`;
+/* NAME */
+const name = new URLSearchParams(location.search).get("name") || "My Love";
+question.innerText = `Will you be my Valentine for the rest of my life, ${name}? 💕`;
 
-/* NO BUTTON ESCAPE */
-const noBtn = document.getElementById("noBtn");
-noBtn.addEventListener("mouseover", () => {
-  noBtn.style.left = Math.random() * (window.innerWidth - 120) + "px";
-  noBtn.style.top = Math.random() * (window.innerHeight - 60) + "px";
-});
+/* NO ESCAPE */
+noBtn.onmouseover = () => {
+  noBtn.style.left = Math.random()*(innerWidth-120)+"px";
+  noBtn.style.top = Math.random()*(innerHeight-60)+"px";
+};
 
-/* YES CLICK */
+/* YES */
 function yesClicked() {
-  document.getElementById("popup").style.display = "flex";
+  popup.style.display="flex";
   fireworks();
 }
 
-/* MUSIC TOGGLE */
+/* MUSIC */
 const music = document.getElementById("music");
-function toggleMusic() {
-  if (music.paused) music.play();
-  else music.pause();
-}
+function toggleMusic(){ music.paused ? music.play() : music.pause(); }
 
 /* FIREWORKS */
-function fireworks() {
-  for (let i = 0; i < 40; i++) {
-    const fw = document.createElement("div");
-    fw.className = "firework";
-    fw.style.left = "50%";
-    fw.style.top = "50%";
-    fw.style.setProperty("--x", `${Math.random()*400-200}px`);
-    fw.style.setProperty("--y", `${Math.random()*400-200}px`);
-    document.body.appendChild(fw);
-    setTimeout(() => fw.remove(), 1000);
+function fireworks(){
+  for(let i=0;i<40;i++){
+    let f=document.createElement("div");
+    f.className="firework";
+    f.style.left="50%";
+    f.style.top="50%";
+    f.style.setProperty("--x",Math.random()*400-200+"px");
+    f.style.setProperty("--y",Math.random()*400-200+"px");
+    document.body.appendChild(f);
+    setTimeout(()=>f.remove(),1000);
   }
 }
+
+/* 🌹 ROSES */
+setInterval(()=>{
+  let r=document.createElement("div");
+  r.className="rose";
+  r.innerHTML="🌹";
+  r.style.left=Math.random()*innerWidth+"px";
+  document.body.appendChild(r);
+  setTimeout(()=>r.remove(),6000);
+},800);
+
+/* 🧡 WHATSAPP */
+wa.href=`https://wa.me/?text=${encodeURIComponent(
+  "I just said YES 💍💖 This made my heart melt 😘"
+)}`;
 </script>
 
 </body>
