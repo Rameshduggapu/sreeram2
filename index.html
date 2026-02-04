@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine 💕</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  background: linear-gradient(135deg, #fff0f5, #ffe6eb);
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.container {
+  text-align: center;
+  padding: 20px;
+  z-index: 2;
+}
+
+h1 {
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.buttons {
+  position: relative;
+  height: 120px;
+}
+
+button {
+  padding: 14px 36px;
+  font-size: 1.1rem;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  margin: 10px;
+  transition: transform 0.3s ease;
+}
+
+.yes {
+  background: #ff4d6d;
+  color: #fff;
+}
+
+.no {
+  background: #e0e0e0;
+  color: #555;
+  position: absolute;
+}
+
+/* Hearts falling */
+.heart {
+  position: absolute;
+  font-size: 20px;
+  animation: fall linear infinite;
+}
+
+@keyframes fall {
+  from { transform: translateY(-10vh); opacity: 1; }
+  to { transform: translateY(110vh); opacity: 0; }
+}
+
+/* Popup */
+.popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.popup-content {
+  background: #fff;
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  animation: pop 0.4s ease;
+}
+
+@keyframes pop {
+  from { transform: scale(0.5); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Confetti */
+.confetti {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  background: red;
+  animation: confettiFall 3s linear forwards;
+}
+
+@keyframes confettiFall {
+  to {
+    transform: translateY(110vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>Will you be my Valentine forever? 💖</h1>
+
+  <div class="buttons">
+    <button class="yes" id="yesBtn">YES</button>
+    <button class="no" id="noBtn">NO</button>
+  </div>
+</div>
+
+<div class="popup" id="popup">
+  <div class="popup-content">
+    <h2>Thank you my love 💕</h2>
+    <p>You made my heart the happiest 💐</p>
+  </div>
+</div>
+
+<script>
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const popup = document.getElementById("popup");
+
+let yesScale = 1;
+
+// YES grows bigger
+noBtn.addEventListener("mouseover", () => {
+  yesScale += 0.15;
+  yesBtn.style.transform = `scale(${yesScale})`;
+
+  noBtn.style.left = Math.random() * (window.innerWidth - 100) + "px";
+  noBtn.style.top = Math.random() * (window.innerHeight - 50) + "px";
+});
+
+// YES click
+yesBtn.addEventListener("click", () => {
+  popup.style.display = "flex";
+  confettiBurst();
+});
+
+// Hearts rain
+setInterval(() => {
+  const heart = document.createElement("div");
+  heart.className = "heart";
+  heart.innerHTML = "💖";
+  heart.style.left = Math.random() * window.innerWidth + "px";
+  heart.style.animationDuration = 3 + Math.random() * 2 + "s";
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 5000);
+}, 300);
+
+// Confetti
+function confettiBurst() {
+  for (let i = 0; i < 80; i++) {
+    const confetti = document.createElement("div");
+    confetti.className = "confetti";
+    confetti.style.left = Math.random() * window.innerWidth + "px";
+    confetti.style.backgroundColor = `hsl(${Math.random()*360},100%,60%)`;
+    confetti.style.animationDuration = 2 + Math.random() * 2 + "s";
+    document.body.appendChild(confetti);
+    setTimeout(() => confetti.remove(), 3000);
+  }
+}
+</script>
+
+</body>
+</html>
