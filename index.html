@@ -2,178 +2,202 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Valentine 💕</title>
+<title>My Valentine 💖</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-* {
-  box-sizing: border-box;
-}
-
 body {
   margin: 0;
   height: 100vh;
-  background: linear-gradient(135deg, #fff0f5, #ffe6eb);
   font-family: 'Segoe UI', sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: #fff;
   overflow: hidden;
 }
 
+.hidden { display: none; }
+
 .container {
   text-align: center;
-  padding: 20px;
   z-index: 2;
 }
 
 h1 {
-  font-size: 1.8rem;
-  color: #333;
+  font-size: 28px;
   margin-bottom: 30px;
-}
-
-.buttons {
-  position: relative;
-  height: 120px;
+  color: #333;
 }
 
 button {
   padding: 14px 36px;
-  font-size: 1.1rem;
+  font-size: 18px;
   border-radius: 30px;
   border: none;
   cursor: pointer;
   margin: 10px;
-  transition: transform 0.3s ease;
 }
 
 .yes {
   background: #ff4d6d;
-  color: #fff;
+  color: white;
+  transition: transform 0.3s;
+}
+
+.yes:hover {
+  transform: scale(1.15);
 }
 
 .no {
   background: #e0e0e0;
-  color: #555;
   position: absolute;
 }
 
-/* Hearts falling */
-.heart {
-  position: absolute;
+.music-btn {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  background: #ff4d6d;
+  color: white;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
   font-size: 20px;
-  animation: fall linear infinite;
-}
-
-@keyframes fall {
-  from { transform: translateY(-10vh); opacity: 1; }
-  to { transform: translateY(110vh); opacity: 0; }
 }
 
 /* Popup */
 .popup {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0,0,0,0.5);
   display: none;
   justify-content: center;
   align-items: center;
-  z-index: 10;
+  z-index: 5;
 }
 
 .popup-content {
-  background: #fff;
+  background: white;
   padding: 30px;
   border-radius: 20px;
   text-align: center;
-  animation: pop 0.4s ease;
 }
 
-@keyframes pop {
-  from { transform: scale(0.5); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+.popup-content img {
+  width: 220px;
+  border-radius: 15px;
+  margin-top: 15px;
 }
 
-/* Confetti */
-.confetti {
-  position: fixed;
-  width: 8px;
-  height: 8px;
+/* Fireworks */
+.firework {
+  position: absolute;
+  width: 6px;
+  height: 6px;
   background: red;
-  animation: confettiFall 3s linear forwards;
+  border-radius: 50%;
+  animation: explode 1s ease-out forwards;
 }
 
-@keyframes confettiFall {
+@keyframes explode {
   to {
-    transform: translateY(110vh) rotate(720deg);
+    transform: translate(var(--x), var(--y));
     opacity: 0;
   }
+}
+
+/* Password */
+#lockScreen input {
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
-  <h1>Will you be my Valentine forever? 💖</h1>
-
-  <div class="buttons">
-    <button class="yes" id="yesBtn">YES</button>
-    <button class="no" id="noBtn">NO</button>
-  </div>
+<!-- 🔐 PASSWORD SCREEN -->
+<div class="container" id="lockScreen">
+  <h1>🔐 Enter the Secret Password</h1>
+  <input type="password" id="passwordInput" placeholder="Password">
+  <br><br>
+  <button onclick="unlock()">Unlock 💖</button>
 </div>
 
+<!-- 💖 MAIN CONTENT -->
+<div class="container hidden" id="mainContent">
+  <h1 id="question"></h1>
+  <button class="yes" onclick="yesClicked()">YES</button>
+  <button class="no" id="noBtn">NO</button>
+</div>
+
+<!-- 🎵 MUSIC -->
+<button class="music-btn hidden" id="musicBtn" onclick="toggleMusic()">🎵</button>
+<audio id="music" loop>
+  <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
+</audio>
+
+<!-- 💌 POPUP -->
 <div class="popup" id="popup">
   <div class="popup-content">
-    <h2>Thank you my love 💕</h2>
-    <p>You made my heart the happiest 💐</p>
+    <h2>Thank you, My Love 💖</h2>
+    <p>You are my forever 🌸</p>
+    <img src="https://via.placeholder.com/300x400" alt="Love">
   </div>
 </div>
 
 <script>
-const yesBtn = document.getElementById("yesBtn");
+/* PASSWORD */
+function unlock() {
+  if (document.getElementById("passwordInput").value === "love123") {
+    document.getElementById("lockScreen").style.display = "none";
+    document.getElementById("mainContent").classList.remove("hidden");
+    document.getElementById("musicBtn").classList.remove("hidden");
+  } else {
+    alert("Wrong password 😜");
+  }
+}
+
+/* NAME PERSONALIZATION */
+const params = new URLSearchParams(window.location.search);
+const name = params.get("name") || "My Love";
+document.getElementById("question").innerText =
+  `Will you be my Valentine for the rest of my life, ${name}? 💕`;
+
+/* NO BUTTON ESCAPE */
 const noBtn = document.getElementById("noBtn");
-const popup = document.getElementById("popup");
-
-let yesScale = 1;
-
-// YES grows bigger
 noBtn.addEventListener("mouseover", () => {
-  yesScale += 0.15;
-  yesBtn.style.transform = `scale(${yesScale})`;
-
-  noBtn.style.left = Math.random() * (window.innerWidth - 100) + "px";
-  noBtn.style.top = Math.random() * (window.innerHeight - 50) + "px";
+  noBtn.style.left = Math.random() * (window.innerWidth - 120) + "px";
+  noBtn.style.top = Math.random() * (window.innerHeight - 60) + "px";
 });
 
-// YES click
-yesBtn.addEventListener("click", () => {
-  popup.style.display = "flex";
-  confettiBurst();
-});
+/* YES CLICK */
+function yesClicked() {
+  document.getElementById("popup").style.display = "flex";
+  fireworks();
+}
 
-// Hearts rain
-setInterval(() => {
-  const heart = document.createElement("div");
-  heart.className = "heart";
-  heart.innerHTML = "💖";
-  heart.style.left = Math.random() * window.innerWidth + "px";
-  heart.style.animationDuration = 3 + Math.random() * 2 + "s";
-  document.body.appendChild(heart);
-  setTimeout(() => heart.remove(), 5000);
-}, 300);
+/* MUSIC TOGGLE */
+const music = document.getElementById("music");
+function toggleMusic() {
+  if (music.paused) music.play();
+  else music.pause();
+}
 
-// Confetti
-function confettiBurst() {
-  for (let i = 0; i < 80; i++) {
-    const confetti = document.createElement("div");
-    confetti.className = "confetti";
-    confetti.style.left = Math.random() * window.innerWidth + "px";
-    confetti.style.backgroundColor = `hsl(${Math.random()*360},100%,60%)`;
-    confetti.style.animationDuration = 2 + Math.random() * 2 + "s";
-    document.body.appendChild(confetti);
-    setTimeout(() => confetti.remove(), 3000);
+/* FIREWORKS */
+function fireworks() {
+  for (let i = 0; i < 40; i++) {
+    const fw = document.createElement("div");
+    fw.className = "firework";
+    fw.style.left = "50%";
+    fw.style.top = "50%";
+    fw.style.setProperty("--x", `${Math.random()*400-200}px`);
+    fw.style.setProperty("--y", `${Math.random()*400-200}px`);
+    document.body.appendChild(fw);
+    setTimeout(() => fw.remove(), 1000);
   }
 }
 </script>
